@@ -1,39 +1,55 @@
 /*
  * us p5.js to draw a clock on a 960x500 canvas
  */ 
+
+/* size of square */
+var s = 20
+
+function draw_number(num, x, y) {
+  /* this resets any previous translations */
+  resetMatrix();
+  translate(x, y);
+  if (num === 1) {
+    rect(s * 3, s * 2, s, s);
+    rect(s * 4, s * 1, s, s);
+    rect(s * 4, s * 2, s, s);
+    rect(s * 4, s * 3, s, s);
+    rect(s * 4, s * 4, s, s);
+    rect(s * 4, s * 5, s, s);
+  }
+  else if (num === 2) {
+    rect(s * 1, s * 1, s, s);
+    rect(s * 2, s * 1, s, s);
+    rect(s * 3, s * 1, s, s);
+    rect(s * 4, s * 2, s, s);
+    rect(s * 4, s * 3, s, s);
+    rect(s * 3, s * 3, s, s);
+    rect(s * 2, s * 4, s, s);
+    rect(s * 1, s * 5, s, s);
+    rect(s * 2, s * 5, s, s);
+    rect(s * 3, s * 5, s, s);
+    rect(s * 4, s * 5, s, s);
+  }
+  else if (num === 3) {
+    rect(s * 1, s * 1, s, s);
+    rect(s * 2, s * 1, s, s);
+    rect(s * 3, s * 1, s, s);
+    rect(s * 4, s * 1, s, s);
+    rect(s * 4, s * 2, s, s);
+    rect(s * 4, s * 3, s, s);
+    rect(s * 3, s * 3, s, s);
+    rect(s * 2, s * 3, s, s);
+    rect(s * 4, s * 4, s, s);
+    rect(s * 4, s * 5, s, s);
+    rect(s * 3, s * 5, s, s);
+    rect(s * 2, s * 5, s, s);
+    rect(s * 1, s * 5, s, s);
+  }
+}
+
 function draw_clock(hour, minute, second, millis, alarm) {
   background(204);
-
-  background(255,255,200); // My favorite pink
-  fill(128,100,100);
-  text("Hour: "   + hour, 10, 22);
-  text("Minute: " + minute, 10, 42);
-  text("Second: " + second, 10, 62);
-  text("Millis: " + millis, 10, 82);
-
-  var hourBarWidth   = map(hour, 0, 23, 0, width);
-  var minuteBarWidth = map(minute, 0, 59, 0, width);
-  var secondBarWidth = map(second, 0, 59, 0, width);
-  var millisBarWidth = map(millis, 0, 1000, 0, width);
-
-  // Make a bar which *smoothly* interpolates across 1 minute.
-  // We calculate a version that goes from 0...60, 
-  // but with a fractional remainder:
-  var secondBarWidthChunky  = map(second, 0, 60, 0, width);
-  var secondsWithFraction   = second + (millis / 1000.0);
-  var secondBarWidthSmooth  = map(secondsWithFraction,   0, 60, 0, width);
-
-  noStroke();
-  fill(40);
-  rect(0, 100, hourBarWidth, 50);
-  fill(80);
-  rect(0, 150, minuteBarWidth, 50);
-  fill(120)
-  rect(0, 200, secondBarWidth, 50);
-  fill(160)
-  rect(0, 250, millisBarWidth, 50);
-  fill(200)
-  rect(0, 350, secondBarWidthChunky, 50);
-  fill(240)
-  rect(0, 400, secondBarWidthSmooth, 50);
+  draw_number(1, 10, 10);
+  draw_number(2, 130, 10);
+  draw_number(3, 250, 10);
 }
