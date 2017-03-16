@@ -170,15 +170,64 @@ function digits_from_num(num) {
 }
 
 function draw_clock(hour, minute, second, millis, alarm) {
-  var hour_pos = [20, height/2 - 3.5 * s];
+  var hour_pos = [40, height/2 - 3.5 * s];
 
-  background(204);
+  // DEBUG CODE TO TEST HOUR ROLLOVER
+  // minute = minute + 35; // change based on current time
+  // if (minute == 60) {
+  //   minute = 0;
+  //   hour = 0;
+  // }
 
+  // is alarm going off?
+  if (alarm == 0) {
+    if (second % 4 < 2) {
+      background(0,0,100);      
+    }
+    else {
+      background(100,100,0);      
+    }
+  }
+  else {
+    background(50);
+  }
+
+  noStroke();
+  // is alarm going off in next 15 seconds
+  if (alarm > 0 && alarm < 15.0) {
+    var box_w = map(alarm, 0, 15, width, 0);
+    var box_h = map(alarm, 0, 15, height, 0);
+    fill(100);
+    rect(width/2-box_w/2, height/2-box_h/2, box_w, box_h);
+  }
+  fill(255);
+
+  // HOURS
   next_hour = (hour + 1) % 24;
   digits1 = digits_from_num(hour);
   digits2 = digits_from_num(next_hour);
-  draw_number(digits1[0], hour_pos[0], hour_pos[1]);
-  draw_number(digits1[1], hour_pos[0] + 1.0 * 5 * s, hour_pos[1]);
+  if(second >= 50 && minute == 59 && 
+      (hour == 9 || hour == 19 || hour == 23)) {
+    // minute_fraction_tens = millis  / 1000.0;
+    seconds_left = (second - 50) + millis / 1000.0;
+    hour_fraction_tens = seconds_left  / 10.0;
+  }
+  else {
+    hour_fraction_tens = 0;
+  }
+  draw_number_interp(hour_fraction_tens, digits1[0], digits2[0], hour_pos[0] + 0.0 * 5 * s, hour_pos[1]);
+  // draw_number(digits1[0], hour_pos[0], hour_pos[1]);
+
+  if(second >= 55 && minute == 59) {
+    // minute_fraction_tens = millis  / 1000.0;
+    seconds_left = (second - 55) + millis / 1000.0;
+    hour_fraction_ones = seconds_left  / 5.0;
+  }
+  else {
+    hour_fraction_ones = 0;
+  }
+  draw_number_interp(hour_fraction_ones, digits1[1], digits2[1], hour_pos[0] + 1.0 * 5 * s, hour_pos[1]);
+  // draw_number(digits1[1], hour_pos[0] + 1.0 * 5 * s, hour_pos[1]);
 
   // MINUTES
   next_minute = (minute + 1) % 60;
@@ -187,13 +236,13 @@ function draw_clock(hour, minute, second, millis, alarm) {
   if(second >= 58 && digits1[1] === 9) {
     // minute_fraction_tens = millis  / 1000.0;
     seconds_left = (second - 58) + millis / 1000.0;
-    minute_fraction_tens = seconds_left  / 5.0;
-    print(minute_fraction_tens);
+    minute_fraction_tens = seconds_left  / 2.0;
   }
   else {
     minute_fraction_tens = 0;
   }
   draw_number_interp(minute_fraction_tens, digits1[0], digits2[0], hour_pos[0] + 2.5 * 5 * s, hour_pos[1]);
+
   if(second === 59) {
     minute_fraction_ones = millis  / 1000.0;
   }

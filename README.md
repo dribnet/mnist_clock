@@ -1,5 +1,7 @@
 ## PS1 MDDN 242 2017
 
-### Clock with interpolation
+### Final clock with alarm
 
-Clock is interpolating seconds and minutes. Hours to come.
+My clock is a retro pixel clock with a strange analog motion. Each digit going
+to the left is meant to have more inertia, and so those numbers take longer to
+turn.
