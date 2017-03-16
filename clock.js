@@ -181,7 +181,7 @@ function draw_clock(hour, minute, second, millis, alarm) {
 
   // is alarm going off?
   if (alarm == 0) {
-    if (second % 4 < 2) {
+    if (second % 2 == 0) {
       background(0,0,100);      
     }
     else {
@@ -194,11 +194,14 @@ function draw_clock(hour, minute, second, millis, alarm) {
 
   noStroke();
   // is alarm going off in next 15 seconds
-  if (alarm > 0 && alarm < 15.0) {
-    var box_w = map(alarm, 0, 15, width, 0);
-    var box_h = map(alarm, 0, 15, height, 0);
+  if (alarm > 0) {
     fill(100);
-    rect(width/2-box_w/2, height/2-box_h/2, box_w, box_h);
+    rect(width-50, height-50, 40, 40);
+    if (alarm < 15.0) {
+      var box_w = map(alarm, 0, 15, width, 0);
+      var box_h = map(alarm, 0, 15, height, 0);
+      rect(width/2-box_w/2, height/2-box_h/2, box_w, box_h);
+    }
   }
   fill(255);
 
