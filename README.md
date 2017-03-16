@@ -1,5 +1,5 @@
 ## PS1 MDDN 242 2017
 
-### Clock without interpolation
+### Clock with interpolation
 
-Functioning clock, but with no interpolation. 
+Clock is interpolating seconds and minutes. Hours to come.

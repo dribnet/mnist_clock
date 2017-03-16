@@ -140,6 +140,21 @@ function draw_number(num, x, y) {
   }
 }
 
+function draw_number_interp(frac, num1, num2, x, y) {
+  /* this resets any previous translations */
+  resetMatrix();
+  translate(x, y);
+  var pixels1 = numbers[num1%numbers.length];
+  var pixels2 = numbers[num2%numbers.length];
+  for(var i=0; i<13; i++) {
+    var cur_pixel1 = pixels1[i%pixels1.length];
+    var cur_pixel2 = pixels2[i%pixels2.length];
+    var pos_x = map(frac, 0.0, 1.0, cur_pixel1[0], cur_pixel2[0]);
+    var pos_y = map(frac, 0.0, 1.0, cur_pixel1[1], cur_pixel2[1]);
+    rect(pos_x * s, pos_y * s, s, s);
+  }
+}
+
 function digits_from_num(num) {
   digits = []
   if (num < 10) {
@@ -158,15 +173,59 @@ function draw_clock(hour, minute, second, millis, alarm) {
   var hour_pos = [20, height/2 - 3.5 * s];
 
   background(204);
-  digits = digits_from_num(hour);
-  draw_number(digits[0], hour_pos[0], hour_pos[1]);
-  draw_number(digits[1], hour_pos[0] + 1.0 * 5 * s, hour_pos[1]);
 
-  digits = digits_from_num(minute);
-  draw_number(digits[0], hour_pos[0] + 2.5 * 5 * s, hour_pos[1]);
-  draw_number(digits[1], hour_pos[0] + 3.5 * 5 * s, hour_pos[1]);
+  next_hour = (hour + 1) % 24;
+  digits1 = digits_from_num(hour);
+  digits2 = digits_from_num(next_hour);
+  draw_number(digits1[0], hour_pos[0], hour_pos[1]);
+  draw_number(digits1[1], hour_pos[0] + 1.0 * 5 * s, hour_pos[1]);
 
-  digits = digits_from_num(second);
-  draw_number(digits[0], hour_pos[0] + 5.0 * 5 * s, hour_pos[1]);
-  draw_number(digits[1], hour_pos[0] + 6.0 * 5 * s, hour_pos[1]);
+  // MINUTES
+  next_minute = (minute + 1) % 60;
+  digits1 = digits_from_num(minute);
+  digits2 = digits_from_num(next_minute);
+  if(second >= 58 && digits1[1] === 9) {
+    // minute_fraction_tens = millis  / 1000.0;
+    seconds_left = (second - 58) + millis / 1000.0;
+    minute_fraction_tens = seconds_left  / 5.0;
+    print(minute_fraction_tens);
+  }
+  else {
+    minute_fraction_tens = 0;
+  }
+  draw_number_interp(minute_fraction_tens, digits1[0], digits2[0], hour_pos[0] + 2.5 * 5 * s, hour_pos[1]);
+  if(second === 59) {
+    minute_fraction_ones = millis  / 1000.0;
+  }
+  else {
+    minute_fraction_ones = 0;
+  }
+  draw_number_interp(minute_fraction_ones, digits1[1], digits2[1], hour_pos[0] + 3.5 * 5 * s, hour_pos[1]);
+  // draw_number(digits1[1], hour_pos[0] + 3.5 * 5 * s, hour_pos[1]);
+
+
+  // SECONDS
+  next_second = (second + 1) % 60;
+  second_fraction = millis / 1000.0;
+  digits1 = digits_from_num(second);
+  digits2 = digits_from_num(next_second);
+
+
+  if(digits1[1] === 9 && millis > 500) {
+    second_fraction_tens = (millis - 500) / 500.0;
+  }
+  else {
+    second_fraction_tens = 0;
+  }
+  // draw the 10 second position
+  draw_number_interp(second_fraction_tens, digits1[0], digits2[0], hour_pos[0] + 5.0 * 5 * s, hour_pos[1]);
+
+  if(millis > 900) {
+    second_fraction_ones = (millis-900) / 100.0;
+  }
+  else {
+    second_fraction_ones = 0;
+  }
+  // draw the 1 second position
+  draw_number_interp(second_fraction_ones, digits1[1], digits2[1], hour_pos[0] + 6.0 * 5 * s, hour_pos[1]);
 }
