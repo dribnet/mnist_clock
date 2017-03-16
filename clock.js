@@ -3,7 +3,7 @@
  */ 
 
 /* size of square */
-var s = 30
+var s = 24
 
 var numbers = [
   // 0
@@ -140,17 +140,33 @@ function draw_number(num, x, y) {
   }
 }
 
-function draw_clock(hour, minute, second, millis, alarm) {
-  background(204);
-  draw_number(0, 10, 10);
-  draw_number(1, 10 + 6 * s, 10);
-  draw_number(2, 10 + 12 * s, 10);
-  draw_number(3, 10 + 18 * s, 10);
-  draw_number(4, 10 + 24 * s, 10);
+function digits_from_num(num) {
+  digits = []
+  if (num < 10) {
+    digits.push(0);
+  }
+  else {
+    n1 = Math.floor(num / 10);
+    digits.push(n1);
+  }
+  n2 = Math.floor(num % 10);
+  digits.push(n2);
+  return digits;
+}
 
-  draw_number(5, 10, 10 + 7 * s);
-  draw_number(6, 10 + 6 * s, 10 + 7 * s);
-  draw_number(7, 10 + 12 * s, 10 + 7 * s);
-  draw_number(8, 10 + 18 * s, 10 + 7 * s);
-  draw_number(9, 10 + 24 * s, 10 + 7 * s);
+function draw_clock(hour, minute, second, millis, alarm) {
+  var hour_pos = [20, height/2 - 3.5 * s];
+
+  background(204);
+  digits = digits_from_num(hour);
+  draw_number(digits[0], hour_pos[0], hour_pos[1]);
+  draw_number(digits[1], hour_pos[0] + 1.0 * 5 * s, hour_pos[1]);
+
+  digits = digits_from_num(minute);
+  draw_number(digits[0], hour_pos[0] + 2.5 * 5 * s, hour_pos[1]);
+  draw_number(digits[1], hour_pos[0] + 3.5 * 5 * s, hour_pos[1]);
+
+  digits = digits_from_num(second);
+  draw_number(digits[0], hour_pos[0] + 5.0 * 5 * s, hour_pos[1]);
+  draw_number(digits[1], hour_pos[0] + 6.0 * 5 * s, hour_pos[1]);
 }

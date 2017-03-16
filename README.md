@@ -1,5 +1,5 @@
 ## PS1 MDDN 242 2017
 
-### Clock Font
+### Clock without interpolation
 
-These number forms will be the basis of my clock design.
+Functioning clock, but with no interpolation. 
