@@ -218,7 +218,7 @@ var concept_vecs_mean = [
   ]
 ];
 
-var curAnchor = [0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6];
+var curAnchor = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
 var curDAnchor = [0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6];
 
 var curModelImages = [null, null, null, null, null, null];
@@ -265,12 +265,12 @@ function local_setup() {
 function move_anchor() {
   for(var i=0; i<8; i++) {
     var next = curAnchor[i] + curDAnchor[i];
-    if(next > 1) {
-      curDAnchor[i] = random(-0.01, -0.05);
+    if(next > 0.5) {
+      curDAnchor[i] = random(-0.01, -0.03);
       next = curAnchor[i] + curDAnchor[i];
     }
-    else if(next < -1) {
-      curDAnchor[i] = random(0.01, 0.05);
+    else if(next < -0.5) {
+      curDAnchor[i] = random(0.01, 0.03);
       next = curAnchor[i] + curDAnchor[i];
     }
     curAnchor[i] = next;
