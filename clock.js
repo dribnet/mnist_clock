@@ -253,7 +253,7 @@ function local_setup() {
   }
 
   var s = 24;
-  var hour_pos = [70, height/2 - 2 * s];
+  var hour_pos = [80, height/2 - 2 * s];
   digitPositions[0] = [hour_pos[0] + 0.0 * 5 * s, hour_pos[1]];
   digitPositions[1] = [hour_pos[0] + 1.0 * 5 * s, hour_pos[1]];
   digitPositions[2] = [hour_pos[0] + 2.5 * 5 * s, hour_pos[1]];
@@ -347,6 +347,7 @@ function draw_clock(hour, minute, second, millis, alarm) {
   if(first_time) {
     local_setup();
     first_time = false;
+    background(0);
   }
 
   move_anchor();
@@ -365,7 +366,11 @@ function draw_clock(hour, minute, second, millis, alarm) {
     background(0);
   }
   */
-  background(0);
+  // background(0);
+  blendMode(BLEND);
+  fill(0, 0, 0, 96);
+  rect(0, height/3, width, 2*height/3);
+  blendMode(ADD);
 
   // draw what digits we have
   var one_was_pending = false;
@@ -472,8 +477,8 @@ function draw_clock(hour, minute, second, millis, alarm) {
     // draw the 10 second position
     curConceptVecs[4] = get_cur_concept_vec(second_fraction_tens, digits1[0], digits2[0]);
 
-    if(millis > 900) {
-      second_fraction_ones = (millis-900) / 100.0;
+    if(millis > 750) {
+      second_fraction_ones = (millis-750) / 250.0;
     }
     else {
       second_fraction_ones = 0;
@@ -482,35 +487,4 @@ function draw_clock(hour, minute, second, millis, alarm) {
     curConceptVecs[5] = get_cur_concept_vec(second_fraction_ones, digits1[1], digits2[1]);
     firePrediction();
   }
-
-/*
-  for(var d=0;d<6;d++) {
-    if(pendingOutput[d] != null) {
-      var curOutput = pendingOutput[d];
-      var curPos = pendingPos[d];
-      pendingOutput[d] = null;
-
-      curModelImages[d].loadPixels();
-      for (var i = 0; i < 27; i++) {
-        for (var j = 0; j < 27; j++) {
-          var val = (255 * curOutput[j*27 + i]);
-          if(val == null || curModelImages[d] == null) {
-            print("Found error at " + d + ":" + val +"," + curModelImages[d]);
-          }
-          else {
-            // print(val, curOutput);
-            curModelImages[d].set(i*2, j*2, color(val));
-            curModelImages[d].set(i*2+1, j*2, color(val));
-            curModelImages[d].set(i*2, j*2+1, color(val));
-            curModelImages[d].set(i*2+1, j*2+1, color(val));
-          }
-        }
-      }
-      curModelImages[d].updatePixels();
-    }
-    if(curModelImages[d] != null && pendingPos[d] != null) {
-      image(curModelImages[d], pendingPos[d][0], pendingPos[d][1]);
-    }
-  }
-*/
 }
